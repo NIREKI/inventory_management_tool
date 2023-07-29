@@ -228,7 +228,7 @@ class _BigMenuCardState extends State<BigMenuCard> {
       cursor: cursor,
       child: GestureDetector(
         child: SizedBox(
-          width: 500,
+          width: 400,
           height: 300,
           child: Card(
             surfaceTintColor: backgroundColor,
