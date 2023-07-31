@@ -2,6 +2,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/services/mouse_cursor.dart';
 import 'package:provider/provider.dart';
+import './db.dart';
 
 void main() {
   runApp(MyApp());
@@ -117,13 +118,25 @@ class ItemsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SelectionArea(
-        child: ListView(
-          children: [
-            ListTile(title: Text("hallo")),
-            ListTile(title: Text("hallo")),
-            ListTile(title: Text("hallo")),
-          ],
-        ),
+        child: Table(border: TableBorder.all(), children: <TableRow>[
+          TableRow(children: <Widget>[
+            SizedBox(
+                height: 32,
+                child: Text("Das ist die erste Zeile, erste Spalte")),
+            SizedBox(
+              height: 32,
+              child: Text("Das steht in der zweiten Spalte"),
+            ),
+          ]),
+          TableRow(children: <Widget>[
+            SizedBox(
+                height: 32,
+                child: Text("Das ist die erste Spalte, zweite Reihe")),
+            SizedBox(
+                height: 32,
+                child: Text("Das ist die zweite Spalte, erste Reihe."))
+          ])
+        ]),
       ),
     );
   }
@@ -227,6 +240,7 @@ class _BigMenuCardState extends State<BigMenuCard> {
       }),
       cursor: cursor,
       child: GestureDetector(
+        onTap: getDatabase,
         child: SizedBox(
           width: 400,
           height: 300,
