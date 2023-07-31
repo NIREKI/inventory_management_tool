@@ -2,6 +2,14 @@
 import 'package:postgres/postgres.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+// ignore: slash_for_doc_comments
+/***
+This function adds basic functionality for accessing the postgreSQL database.
+
+For that, the postgres dart package is used. Auth files get pulled from a env file using the flutter_dotenv flutter package.
+
+The postgreSQL Database is hosted by neon, for handling advantages.#
+*/
 Future<void> getDatabase() async {
   await dotenv.load(fileName: ".env");
   var connection = PostgreSQLConnection(
