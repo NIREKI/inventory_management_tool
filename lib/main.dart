@@ -128,11 +128,18 @@ class _ContractPageState extends State<ContractPage> {
     getDBasync();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future getDBasync() async {
     List<Map<String, Map<String, dynamic>>> results = await getDatabase();
-    setState(() {
-      _dbData = results;
-    });
+    if (mounted) {
+      setState(() {
+        _dbData = results;
+      });
+    }
   }
 
   @override
@@ -159,21 +166,26 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          GestureDetector(
-            onTap: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => createContract()))
-            },
-            child: BigMenuCard("Neuen Artikel anlegen",
-                "Über dieses Menü kann ein neuer Artikel angelegt werden."),
-          ),
-          BigMenuCard("Neuen Leasingvertrag anlegen",
-              "In diesem Menü kann ein neuer Leasingvertrag angelegt werden. Leasingverträge fassen verschiedene Artikel zusammen."),
-        ],
-      ),
+      body: ListView(children: [
+        Wrap(
+          direction: Axis.horizontal,
+          children: [
+            GestureDetector(
+              onTap: () => {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => createContract()))
+              },
+              child: BigMenuCard("Neuen Artikel anlegen",
+                  "Über dieses Menü kann ein neuer Artikel angelegt werden."),
+            ),
+            GestureDetector(
+              onTap: () => getDatabase(),
+              child: BigMenuCard("Neuen Leasingvertrag anlegen",
+                  "In diesem Menü kann ein neuer Leasingvertrag angelegt werden. Leasingverträge fassen verschiedene Artikel zusammen."),
+            ),
+          ],
+        ),
+      ]),
     );
   }
 }
