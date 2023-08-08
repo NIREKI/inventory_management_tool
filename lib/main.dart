@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/services/mouse_cursor.dart';
 import 'package:provider/provider.dart';
 import './db.dart';
+import './createContract.dart';
 
 void main() {
   runApp(MyApp());
@@ -69,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = HomePage();
         break;
       case 1:
-        page = ItemsPage();
+        page = ContractPage();
         break;
       default:
         throw UnimplementedError("Dieses Widget gibt es nicht!");
@@ -87,8 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: Text('Übersicht'),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
-                    label: Text('Favoriten'),
+                    icon: Icon(Icons.adf_scanner),
+                    label: Text('Vertragsübersicht'),
                   ),
                 ],
                 selectedIndex: selectedIndex,
@@ -113,31 +114,41 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class ItemsPage extends StatelessWidget {
+class ContractPage extends StatefulWidget {
+  const ContractPage({super.key});
+  @override
+  State<ContractPage> createState() => _ContractPageState();
+}
+
+class _ContractPageState extends State<ContractPage> {
+  List<Map<String, Map<String, dynamic>>> _dbData = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    getDBasync();
+  }
+
+  Future getDBasync() async {
+    List<Map<String, Map<String, dynamic>>> results = await getDatabase();
+    setState(() {
+      _dbData = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SelectionArea(
-        child: Table(border: TableBorder.all(), children: <TableRow>[
-          TableRow(children: <Widget>[
-            SizedBox(
-                height: 32,
-                child: Text("Das ist die erste Zeile, erste Spalte")),
-            SizedBox(
-              height: 32,
-              child: Text("Das steht in der zweiten Spalte"),
-            ),
-          ]),
-          TableRow(children: <Widget>[
-            SizedBox(
-                height: 32,
-                child: Text("Das ist die erste Spalte, zweite Reihe")),
-            SizedBox(
-                height: 32,
-                child: Text("Das ist die zweite Spalte, erste Reihe."))
+          child: DataTable(columns: const <DataColumn>[
+        DataColumn(label: Text("VertragsID")),
+        DataColumn(label: Text("Vergebene Nummer"))
+      ], rows: <DataRow>[
+        for (var result in _dbData)
+          DataRow(cells: [
+            DataCell(Text(result["contract"]!["id"].toString())),
+            DataCell(Text(result["contract"]!["number"].toString()))
           ])
-        ]),
-      ),
+      ])),
     );
   }
 }
@@ -151,8 +162,14 @@ class HomePage extends StatelessWidget {
       body: Wrap(
         direction: Axis.horizontal,
         children: [
-          BigMenuCard("Neuen Artikel anlegen",
-              "Über dieses Menü kann ein neuer Artikel angelegt werden."),
+          GestureDetector(
+            onTap: () => {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => createContract()))
+            },
+            child: BigMenuCard("Neuen Artikel anlegen",
+                "Über dieses Menü kann ein neuer Artikel angelegt werden."),
+          ),
           BigMenuCard("Neuen Leasingvertrag anlegen",
               "In diesem Menü kann ein neuer Leasingvertrag angelegt werden. Leasingverträge fassen verschiedene Artikel zusammen."),
         ],
@@ -239,27 +256,24 @@ class _BigMenuCardState extends State<BigMenuCard> {
         backgroundColor = Colors.black;
       }),
       cursor: cursor,
-      child: GestureDetector(
-        onTap: getDatabase,
-        child: SizedBox(
-          width: 400,
-          height: 300,
-          child: Card(
-            surfaceTintColor: backgroundColor,
-            child: Column(
-              children: [
-                Padding(
+      child: SizedBox(
+        width: 400,
+        height: 300,
+        child: Card(
+          surfaceTintColor: backgroundColor,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(title, style: theme.textTheme.headlineMedium),
+              ),
+              Flexible(
+                child: Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Text(title, style: theme.textTheme.headlineMedium),
+                  child: Text(desc, style: theme.textTheme.labelMedium),
                 ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(desc, style: theme.textTheme.labelMedium),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

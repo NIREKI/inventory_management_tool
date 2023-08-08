@@ -10,21 +10,18 @@ For that, the postgres dart package is used. Auth files get pulled from a env fi
 
 The postgreSQL Database is hosted by neon, for handling advantages.#
 */
-Future<void> getDatabase() async {
+Future<List<Map<String, Map<String, dynamic>>>> getDatabase() async {
   await dotenv.load(fileName: ".env");
   var connection = PostgreSQLConnection(
-      "ep-blue-snowflake-14769344.eu-central-1.aws.neon.tech",
-      5432,
-      "inventoryDB",
-      username: "flutter",
-      password: dotenv.env["POSTGRE_PASS"],
-      useSSL: true);
+      dotenv.env["POSTGRE_HOST"].toString(), 5432, "inventoryDB",
+      username: "flutter", password: dotenv.env["POSTGRE_PASS"], useSSL: true);
   await connection.open();
   print("connection opened");
   List<Map<String, Map<String, dynamic>>> results =
-      await connection.mappedResultsQuery("SELECT * FROM users");
+      await connection.mappedResultsQuery("SELECT * FROM contract");
   for (final result in results) {
     print(result);
   }
   connection.close();
+  return results;
 }
