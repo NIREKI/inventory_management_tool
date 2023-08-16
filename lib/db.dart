@@ -9,6 +9,9 @@ This function adds basic functionality for using an API (https://github.com/NIRE
 that returns the database querys as JSON strings. This removes the database requests from the clients and thus makes the 
 application more dynamic and safe. By this, the application code also gets cleaner.
 */
+
+//TODO: add error handling if API refuses Request
+
 Future<List<dynamic>> getDatabase() async {
   var response = await getDB().timeout(const Duration(seconds: 5));
   print(response.statusCode);
