@@ -121,7 +121,7 @@ class ContractPage extends StatefulWidget {
 }
 
 class _ContractPageState extends State<ContractPage> {
-  List<Map<String, Map<String, dynamic>>> _dbData = [];
+  List<dynamic> _dbData = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -134,7 +134,7 @@ class _ContractPageState extends State<ContractPage> {
   }
 
   Future getDBasync() async {
-    List<Map<String, Map<String, dynamic>>> results = await getDatabase();
+    List<dynamic> results = await getDatabase();
     if (mounted) {
       setState(() {
         _dbData = results;
@@ -148,12 +148,14 @@ class _ContractPageState extends State<ContractPage> {
       body: SelectionArea(
           child: DataTable(columns: const <DataColumn>[
         DataColumn(label: Text("VertragsID")),
-        DataColumn(label: Text("Vergebene Nummer"))
+        DataColumn(label: Text("Vergebene Nummer")),
+        DataColumn(label: Text("Vertragspartner"))
       ], rows: <DataRow>[
         for (var result in _dbData)
           DataRow(cells: [
             DataCell(Text(result["contract"]!["id"].toString())),
-            DataCell(Text(result["contract"]!["number"].toString()))
+            DataCell(Text(result["contract"]!["number"].toString())),
+            DataCell(Text(result["contract"]!["provider"].toString()))
           ])
       ])),
     );

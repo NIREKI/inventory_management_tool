@@ -1,27 +1,20 @@
-//import 'package:flutter/material.dart';
-import 'package:postgres/postgres.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
 
 // ignore: slash_for_doc_comments
 /***
-This function adds basic functionality for accessing the postgreSQL database.
-
-For that, the postgres dart package is used. Auth files get pulled from a env file using the flutter_dotenv flutter package.
-
-The postgreSQL Database is hosted by neon, for handling advantages.#
+This function adds basic functionality for using an API (https://github.com/NIREKI/inventory_database_api)
+that returns the database querys as JSON strings. This removes the database requests from the clients and thus makes the 
+application more dynamic and safe. By this, the application code also gets cleaner.
 */
-Future<List<Map<String, Map<String, dynamic>>>> getDatabase() async {
-  await dotenv.load(fileName: ".env");
-  var connection = PostgreSQLConnection(
-      dotenv.env["POSTGRE_HOST"].toString(), 5432, "inventoryDB",
-      username: "flutter", password: dotenv.env["POSTGRE_PASS"], useSSL: true);
-  await connection.open();
-  print("connection opened");
-  List<Map<String, Map<String, dynamic>>> results =
-      await connection.mappedResultsQuery("SELECT * FROM contract");
-  for (final result in results) {
-    print(result);
-  }
-  connection.close();
-  return results;
+Future<List<dynamic>> getDatabase() async {
+  var response = await getDB();
+  return json.decode(response.body);
+}
+
+Future<http.Response> getDB() {
+  var httpResponse = http.get(Uri.parse('http://localhost:8080/test'));
+  return httpResponse;
 }
