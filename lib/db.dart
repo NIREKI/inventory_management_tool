@@ -10,7 +10,9 @@ that returns the database querys as JSON strings. This removes the database requ
 application more dynamic and safe. By this, the application code also gets cleaner.
 */
 Future<List<dynamic>> getDatabase() async {
-  var response = await getDB();
+  var response = await getDB().timeout(const Duration(seconds: 5));
+  print(response.statusCode);
+  print(response.body);
   return json.decode(response.body);
 }
 
