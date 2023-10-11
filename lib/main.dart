@@ -151,7 +151,7 @@ class HomePage extends StatelessWidget {
                   "Über dieses Menü kann ein neuer Artikel angelegt werden."),
             ),
             GestureDetector(
-              onTap: () => getDatabase(),
+              //onTap: () => getDatabase(),
               child: BigMenuCard("Neuen Leasingvertrag anlegen",
                   "In diesem Menü kann ein neuer Leasingvertrag angelegt werden. Leasingverträge fassen verschiedene Artikel zusammen."),
             ),

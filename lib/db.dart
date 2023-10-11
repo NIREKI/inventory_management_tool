@@ -20,6 +20,6 @@ Future<List<dynamic>> getDatabase() async {
 }
 
 Future<http.Response> getDB() {
-  var httpResponse = http.get(Uri.parse('http://localhost:8080/test'));
+  var httpResponse = http.get(Uri.parse('http://localhost:8040/test'));
   return httpResponse;
 }

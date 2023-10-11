@@ -7,7 +7,7 @@ class createContract extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: theme.colorScheme.primary,
-          title: Text("Einen neuen Vertrag anlegen",
+          title: Text("Einen neuen Artikel anlegen",
               style: TextStyle(color: Colors.white))),
       body: Column(children: [Row()]),
     );
